@@ -18,7 +18,7 @@ ETHexporter is a tool that allows us to fetch Ethereum wallet balances and expos
 
 
 Docker image is availeble at : http://20.108.47.166:9015/metrics
-![Uploading image.png…]()
+![image](https://github.com/Ghassenmoalla/ethereum-wallet-monitoring/assets/79667852/3f44353d-73e1-4c7c-b393-ca31ba3482b9)
 
 ```yaml
 version: '3'
@@ -31,4 +31,43 @@ services:
       - GETH=https://mainnet.infura.io/f9452131f24a4b5c9cf700547af9d571
     volumes:
       - ./addresses.txt:/app/addresses.txt
+
+```
+
+### Step 3: Setting Up Prometheus server
+
+Docker image is available at : http://20.108.47.166:9090/
+![image](https://github.com/Ghassenmoalla/ethereum-wallet-monitoring/assets/79667852/f7f19411-067f-4476-93bc-87aed969f3a5)
+
+```yaml
+version: '3.7'
+
+services:
+  ethexporter:
+    image: hunterlong/ethexporter:latest
+    ports:
+      - "9015:9015"
+    environment:
+      - GETH=https://mainnet.infura.io/f9452131f24a4b5c9cf700547af9d571
+    volumes:
+      - ./addresses.txt:/app/addresses.txt
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+
+```
+
+### Step 4: Setting Up Grafana
+
+![image](https://github.com/Ghassenmoalla/ethereum-wallet-monitoring/assets/79667852/7cdfc5bb-1224-4cdf-860f-d734e0131858)
+![Uploading image.png…]()
+http://20.108.47.166:3000/d/pgGHUOdmz/ethereum-exporter?orgId=1&from=1714068056353&to=1714081538312
 
