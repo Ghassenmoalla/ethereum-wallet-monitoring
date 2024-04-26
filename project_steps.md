@@ -18,7 +18,6 @@ ETHexporter is a tool that allows us to fetch Ethereum wallet balances and expos
 
 
 Docker image is availeble at : http://20.108.47.166:9015/metrics
-![image](https://github.com/Ghassenmoalla/ethereum-wallet-monitoring/assets/79667852/3f44353d-73e1-4c7c-b393-ca31ba3482b9)
 
 ```yaml
 version: '3'
@@ -33,11 +32,11 @@ services:
       - ./addresses.txt:/app/addresses.txt
 
 ```
+![image](https://github.com/Ghassenmoalla/ethereum-wallet-monitoring/assets/79667852/3f44353d-73e1-4c7c-b393-ca31ba3482b9)
 
 ### Step 3: Setting Up Prometheus server
 
 Docker image is available at : http://20.108.47.166:9090/
-![image](https://github.com/Ghassenmoalla/ethereum-wallet-monitoring/assets/79667852/f7f19411-067f-4476-93bc-87aed969f3a5)
 
 ```yaml
 version: '3.7'
@@ -64,12 +63,12 @@ services:
       - '--web.enable-lifecycle'
 
 ```
+![image](https://github.com/Ghassenmoalla/ethereum-wallet-monitoring/assets/79667852/f7f19411-067f-4476-93bc-87aed969f3a5)
 
 ### Step 4: Setting Up Grafana
 
-![image](https://github.com/Ghassenmoalla/ethereum-wallet-monitoring/assets/79667852/7cdfc5bb-1224-4cdf-860f-d734e0131858)
-![image](https://github.com/Ghassenmoalla/ethereum-wallet-monitoring/assets/79667852/edeb11bf-619e-4cd1-8356-9475824a508f)
-http://20.108.47.166:3000/d/pgGHUOdmz/ethereum-exporter?orgId=1&from=1714068056353&to=1714081538312
+
+http://20.108.47.166:3000/
 
 
 
@@ -103,4 +102,7 @@ services:
 
 
 ```
+
+![image](https://github.com/Ghassenmoalla/ethereum-wallet-monitoring/assets/79667852/7cdfc5bb-1224-4cdf-860f-d734e0131858)
+![image](https://github.com/Ghassenmoalla/ethereum-wallet-monitoring/assets/79667852/edeb11bf-619e-4cd1-8356-9475824a508f)
 ![image](https://github.com/Ghassenmoalla/ethereum-wallet-monitoring/assets/79667852/f06b6813-810b-4036-b15d-8380d724e6ee)
