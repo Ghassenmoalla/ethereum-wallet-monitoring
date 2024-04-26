@@ -69,8 +69,12 @@ services:
 http://20.108.47.166:3000/
 
 
+```yaml
+docker run -d -p 3000:3000 --name=grafana grafana/grafana-enterprise
+```
 
-### Step 4: Setting Up Traefik
+
+### Step 5: Setting Up Traefik
 
 
 ```yaml
@@ -99,5 +103,64 @@ services:
       - "traefik.http.services.your-service.loadbalancer.server.port=3000"
 
 
+```
+
+### Step 5: Prevent any data loss
+
+To safeguard against data loss when recreating our container stack, we'll leverage Docker volumes for persistent storage. This approach allows us to maintain essential data for Prometheus, Grafana, and Traefik outside the containers, ensuring it remains intact even if the containers themselves are destroyed or recreated.
+
+
+
+```yaml
+version: '3.7'
+
+services:
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    networks:
+      - web
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - web
+
+  traefik:
+    image: traefik:v2.11
+    command: --api.insecure=true --providers.docker
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - traefik_certificates:/etc/traefik/acme
+    networks:
+      - web
+
+volumes:
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  traefik_certificates:
+    driver: local
+
+networks:
+  web:
+    external: true
 ```
 
