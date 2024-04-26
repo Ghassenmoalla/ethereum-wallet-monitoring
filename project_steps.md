@@ -68,6 +68,39 @@ services:
 ### Step 4: Setting Up Grafana
 
 ![image](https://github.com/Ghassenmoalla/ethereum-wallet-monitoring/assets/79667852/7cdfc5bb-1224-4cdf-860f-d734e0131858)
-![Uploading image.png…]()
+![image](https://github.com/Ghassenmoalla/ethereum-wallet-monitoring/assets/79667852/edeb11bf-619e-4cd1-8356-9475824a508f)
 http://20.108.47.166:3000/d/pgGHUOdmz/ethereum-exporter?orgId=1&from=1714068056353&to=1714081538312
 
+
+
+### Step 4: Setting Up Traefik
+
+
+```yaml
+version: '3.7'
+
+services:
+  reverse-proxy:
+    # The official v2 Traefik docker image
+    image: traefik:v2.11
+    # Enables the web UI and tells Traefik to listen to docker
+    command: --api.insecure=true --providers.docker
+    ports:
+      # The HTTP port
+      - "80:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.your-service.rule=Host(`20.108.47.166`) && PathPrefix(`/`)"
+      - "traefik.http.routers.your-service.entrypoints=web"
+      - "traefik.http.routers.your-service.middlewares=test-ipwhitelist"
+      - "traefik.http.middlewares.test-ipwhitelist.ipwhitelist.sourcerange=197.8.1.185"
+      - "traefik.http.services.your-service.loadbalancer.server.port=3000"
+
+
+```
+![image](https://github.com/Ghassenmoalla/ethereum-wallet-monitoring/assets/79667852/f06b6813-810b-4036-b15d-8380d724e6ee)
